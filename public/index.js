@@ -16,7 +16,7 @@ eventSource.onerror = () => {
 }
 
 //Events when invest button is clicked
-investForm.addEventListener("submit", function(e) {
+investForm.addEventListener("submit", async function(e) {
   //prevent default behavior and get data from the form
   e.preventDefault()
   const formData = new FormData(investForm)
@@ -27,14 +27,48 @@ investForm.addEventListener("submit", function(e) {
 
   //get the price by the time the button was clicked, convert it to number
   const currentPrice = Number(priceDisplay.textContent)
+  //calculate goldSold
+  const goldSold = (invest/currentPrice).toFixed(2)
 
-  console.log("The data type of the currentPrice is: " + typeof(currentPrice)+ currentPrice)
-  console.log("The data type of the invest is: " + typeof(invest) + invest)
+  //Post log to server
+  const data = await logPurchase(invest, currentPrice, goldSold)
+  console.log(data)
 
-  const message = `You just bought about ${(invest/currentPrice).toFixed(2)} ounces (ozt) for £${invest}. \n You will receive documentation shortly.`
-  document.getElementById("investment-summary").textContent = message
+  document.getElementById("investment-summary").textContent =
+      `You just bought about ${goldSold} ounces (ozt) for $${invest}. You will receive documentation shortly.`
 
+
+  //close the dialog
   document.querySelector(".outputs button").addEventListener("click", () => {
     outputs.close()
   })
 })
+
+async function logPurchase(amountPaid, currentPrice, goldSold){
+  const currentTime = new Date()
+  try{
+    const res = await fetch("/purchased", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        time: currentTime,
+        paid: amountPaid,
+        price: currentPrice,
+        sold: goldSold
+      })
+    })
+    if (res.ok){
+      const data = await res.json()
+      console.log("Purchase log has been sent to server")
+      return data
+    }
+    else{
+      console.error("Server error: "+res.statusText)
+    }
+  }
+  catch(e){
+    console.log("Error: " + e)
+  }
+}

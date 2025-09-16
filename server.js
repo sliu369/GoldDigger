@@ -1,7 +1,7 @@
 import http from "http"
 import {serveStatic} from "./utils/serveStatic.js"
 import { getPrice } from "./utils/getPrice.js"
-import path from "node:path"
+import {handlePost} from "./utils/routeHandlers.js"
 
 const __dirname = import.meta.dirname
 
@@ -11,10 +11,11 @@ const PORT = 8000
 
 const server = http.createServer(async (req, res) => {
 
-    if (!(req.url === '/price/live')){
-        return await serveStatic(req, res, __dirname)
-    }
-    else if (req.url ==='/price/live'){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.url ==='/price/live'){
 
         res.setHeader("Content-Type", "text/event-stream");
         res.setHeader("Cache-Control", "no-cache");
@@ -27,8 +28,14 @@ const server = http.createServer(async (req, res) => {
             )
         }, 2000);
     }
-    
-    
+    else if (req.url === "/purchased"){
+        if(req.method === "POST"){
+            return await handlePost(req, res)
+        }
+    }
+    else if (!req.url.startsWith("/purchased")){
+        return await serveStatic(req, res, __dirname)
+    }
 })
 
 server.listen(PORT, () => console.log("Server is listening on port " + PORT))
