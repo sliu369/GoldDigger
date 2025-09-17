@@ -8,6 +8,7 @@ export async function writeLog(body) {
             `\n${body.time}, amount paid: $${body.paid}, price per Oz: $${body.price}, gold sold: ${body.sold} Oz`
 
         await fs.appendFile(logFilePath, log, 'utf8')
+        return log
     }catch(e){
         throw new Error (e)
     }

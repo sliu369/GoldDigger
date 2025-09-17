@@ -1,3 +1,5 @@
+
+
 const eventSource = new EventSource('/price/live')
 const priceDisplay = document.getElementById("price-display")
 const outputs = document.querySelector(".outputs")
@@ -53,7 +55,7 @@ async function logPurchase(amountPaid, currentPrice, goldSold){
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        time: new Date().toLocaleDateString(),
+        time: toLocalISOString(new Date()),
         paid: amountPaid,
         price: currentPrice,
         sold: goldSold
@@ -71,4 +73,11 @@ async function logPurchase(amountPaid, currentPrice, goldSold){
   catch(e){
     console.log("Error: " + e)
   }
+}
+
+//helper function to create iso time string in local time zone
+function toLocalISOString(date){
+  const tzOffset = date.getTimezoneOffset() * 60000; // offset in ms
+  const localDate = new Date(date - tzOffset);
+  return localDate.toISOString().slice(0, -1);
 }

@@ -4,3 +4,6 @@
 2025-09-17T14:05:24.041Z, amount paid: $1231, price per Oz: $5102, gold sold: 0.24 Oz
 undefined, amount paid: $1231, price per Oz: $5132, gold sold: 0.24 Oz
 9/17/2025, amount paid: $12312, price per Oz: $5169, gold sold: 2.38 Oz
+9/17/2025, amount paid: $2342342, price per Oz: $5026, gold sold: 466.04 Oz
+9/17/2025, amount paid: $7887787, price per Oz: $5030, gold sold: 1568.15 Oz
+2025-09-17T11:09:11.689, amount paid: $12313, price per Oz: $5101, gold sold: 2.41 Oz
