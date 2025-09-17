@@ -45,7 +45,7 @@ investForm.addEventListener("submit", async function(e) {
 })
 
 async function logPurchase(amountPaid, currentPrice, goldSold){
-  const currentTime = new Date()
+  
   try{
     const res = await fetch("/purchased", {
       method: "POST",
@@ -53,7 +53,7 @@ async function logPurchase(amountPaid, currentPrice, goldSold){
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        time: currentTime,
+        time: new Date().toLocaleDateString(),
         paid: amountPaid,
         price: currentPrice,
         sold: goldSold
